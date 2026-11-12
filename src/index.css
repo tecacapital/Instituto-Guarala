@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-guarala-red: #c8102e;
+  --color-guarala-gold: #d4af37;
+  --color-guarala-dark: #1a1a1a;
+  --color-guarala-light: #f8f5f0;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-slate-900 font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
