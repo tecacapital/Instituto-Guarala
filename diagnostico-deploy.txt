@@ -1,0 +1,198 @@
+﻿============================================================
+ DIAGNOSTICO DE DEPLOY - INSTITUTO GUARALA
+ Data: 2026-11-13 08:50:14
+============================================================
+
+--- 1. RAIZ DO PROJETO ---
+  d--h-- .git
+  d----- .github
+  d----- asset
+  d----- node_modules
+  d----- src
+  -a---- .gitattributes
+  -a---- .gitignore
+  -a---- index.html
+  -a---- package-lock.json
+  -a---- package.json
+  -a---- tsconfig.json
+  -a---- tsconfig.node.json
+  -a---- vite.config.ts
+
+--- 2. vite.config.ts (conteudo real) ---
+  import { defineConfig } from 'vite';
+  import react from '@vitejs/plugin-react';
+  import tailwindcss from '@tailwindcss/vite';
+  import path from 'path';
+  
+  export default defineConfig({
+    plugins: [react(), tailwindcss()],
+    base: '/Instituto-Guarala/',
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+  });
+
+--- 3. package.json (scripts e deps) ---
+  scripts:
+    dev        = vite
+    build      = tsc && vite build
+    preview    = vite preview
+  dependencies:
+    lucide-react              ^0.546.0
+    react                     ^19.0.1
+    react-dom                 ^19.0.1
+  devDependencies:
+    @tailwindcss/vite         ^4.3.3
+    @types/react              ^19.3.0
+    @types/react-dom          ^19.3.0
+    @vitejs/plugin-react      ^5.0.0
+    autoprefixer              ^10.4.21
+    postcss                   ^8.4.49
+    tailwindcss               ^4.3.3
+    typescript                ^5.7.3
+    vite                      ^6.0.7
+
+--- 4. index.html (entry point) ---
+  <!doctype html>
+  <html lang="pt">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Instituto Guarala | FormaÃ§Ã£o TÃ©cnica de ExcelÃªncia</title>
+      <meta name="description" content="Instituto Guarala. FormaÃ§Ã£o tÃ©cnica de excelÃªncia em InformÃ¡tica, GestÃ£o, Redes e TelecomunicaÃ§Ãµes." />
+      <link rel="icon" type="image/png" href="/asset/logo.png" />
+    </head>
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>
+
+--- 5. Pasta dist/ (build de producao) ---
+  !! NAO EXISTE dist/ (nunca foi feito build, ou foi limpo)
+
+--- 6. .github/workflows/ ---
+  FICHEIRO: deploy.yml
+    name: Deploy to GitHub Pages
+    
+    on:
+      push:
+        branches: [ "main" ]
+      workflow_dispatch:
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+    
+          - name: Setup Node
+            uses: actions/setup-node@v4
+            with:
+              node-version: 20
+              cache: 'npm'
+    
+          - name: Install dependencies
+            run: npm ci
+    
+          - name: Build
+            run: npm run build
+    
+          - name: Setup Pages
+            uses: actions/configure-pages@v5
+    
+          - name: Upload artifact
+            uses: actions/upload-pages-artifact@v3
+            with:
+              path: ./dist
+    
+      deploy:
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v4
+
+
+--- 7. GIT ---
+  git status:
+    On branch main
+    Your branch is up to date with 'origin/main'.
+    
+    nothing to commit, working tree clean
+  branch: main
+  remote:
+    origin	https://github.com/tecacapital/Instituto-Guarala.git (fetch)
+    origin	https://github.com/tecacapital/Instituto-Guarala.git (push)
+  ultimos 5 commits:
+    77a0a51 ci: adicionar workflow de deploy para GitHub Pages
+    efdd11a feat: landing page completa do Instituto Guarala (Vite + React + TS + Tailwind)
+    ff66b72 Initial commit
+
+--- 8. .gitignore ---
+  node_modules/
+  dist/
+  .env
+  .env.local
+  .env.production
+  *.log
+  .DS_Store
+
+--- 9. src/data/images.ts (imports de assets) ---
+  import logo from '../../asset/logo.png';
+  import whatsapp1 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.33 (1).jpeg';
+  import whatsapp2 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.33 (2).jpeg';
+  import whatsapp3 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.33 (3).jpeg';
+  import whatsapp4 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.33.jpeg';
+  import whatsapp5 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.34 (1).jpeg';
+  import whatsapp6 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.34.jpeg';
+  import whatsapp7 from '../../asset/WhatsApp Image 2026-11-09 at 19.39.35.jpeg';
+  
+  export const images = {
+    logo,
+    whatsapp1,
+    whatsapp2,
+    whatsapp3,
+    whatsapp4,
+    whatsapp5,
+    whatsapp6,
+    whatsapp7,
+  } as const;
+  
+  export type ImageKey = keyof typeof images;
+
+--- 10. Nomes reais dos assets ---
+      389356  logo.png
+      170983  WhatsApp Image 2026-11-09 at 19.39.33 (1).jpeg
+      172921  WhatsApp Image 2026-11-09 at 19.39.33 (2).jpeg
+      123052  WhatsApp Image 2026-11-09 at 19.39.33 (3).jpeg
+      155545  WhatsApp Image 2026-11-09 at 19.39.33.jpeg
+      119345  WhatsApp Image 2026-11-09 at 19.39.34 (1).jpeg
+      119749  WhatsApp Image 2026-11-09 at 19.39.34.jpeg
+      143411  WhatsApp Image 2026-11-09 at 19.39.35.jpeg
+
+--- 11. TypeScript check (tsc --noEmit) ---
+  OK: sem erros de TypeScript.
+
+--- 12. Caminhos absolutos suspeitos em src/ ---
+  Nenhum caminho absoluto suspeito encontrado em src/.
+
+============================================================
+ FIM DO DIAGNOSTICO
+============================================================

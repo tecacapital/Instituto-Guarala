@@ -6,6 +6,10 @@ import path from 'path';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/Instituto-Guarala/',
+  build: {
+    outDir: 'docs',
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
